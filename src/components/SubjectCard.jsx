@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function SubjectCard({ subject }) {
@@ -18,10 +18,10 @@ export default function SubjectCard({ subject }) {
       {/* Subject Image with slight zoom effect */}
       <div className="overflow-hidden">
         <Image
-          src={subject.image} 
+          src={subject.image}
           alt={`${subject.name} image`}
-          width={400} 
-          height={300} 
+          width={400}
+          height={300}
           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
         />
       </div>

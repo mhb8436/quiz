@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePoints } from "@/context/PointsContext";
-import QuestionTimer from "@/components/QuestionTimer";
-import Results from "@/components/Results";
-
+import { usePoints } from "../../../context/PointsContext";
+import QuestionTimer from "../../../components/QuestionTimer";
+import Results from "../../../components/Results";
+import { v4 as uuidv4 } from "uuid";
 const Quiz = ({ params }) => {
   const { subject } = params;
   const { points, setPoints } = usePoints();
@@ -19,7 +19,7 @@ const Quiz = ({ params }) => {
   const [unattemptedQuestions, setUnattemptedQuestions] = useState(0);
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const [timePerQuestion, setTimePerQuestion] = useState(0);
-
+  const [userId, setUserId] = useState(uuidv4());
   useEffect(() => {
     const fetchQuestions = async () => {
       const response = await fetch("/data/questions.json");
@@ -82,8 +82,15 @@ const Quiz = ({ params }) => {
       {!showResults ? (
         <div className="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6 relative">
           {/* Progress Bar */}
-          <div className="absolute top-0 left-0 h-2 bg-blue-500 transition-all duration-300" style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}></div>
-          
+          <div
+            className="absolute top-0 left-0 h-2 bg-blue-500 transition-all duration-300"
+            style={{
+              width: `${
+                ((currentQuestionIndex + 1) / questions.length) * 100
+              }%`,
+            }}
+          ></div>
+
           {/* Question Number */}
           <h2 className="text-2xl font-semibold text-center mb-4 text-blue-600">
             Question {currentQuestionIndex + 1} of {questions.length}
@@ -94,7 +101,6 @@ const Quiz = ({ params }) => {
             {questions[currentQuestionIndex]?.question}
           </h3>
 
-
           {/* Timer */}
           <QuestionTimer
             onTimeUp={handleTimeUp}
@@ -103,8 +109,6 @@ const Quiz = ({ params }) => {
             resetTimer={currentQuestionIndex}
           />
 
-          
-
           {/* Options */}
           <div className="mt-6 space-y-4">
             {questions[currentQuestionIndex]?.options.map((option) => (
@@ -112,7 +116,8 @@ const Quiz = ({ params }) => {
                 key={option}
                 onClick={() => handleAnswer(option)}
                 className={`w-full py-4 px-6 rounded-lg text-lg font-semibold transition duration-300 focus:outline-none ${
-                  isAnswered && option === questions[currentQuestionIndex].answer
+                  isAnswered &&
+                  option === questions[currentQuestionIndex].answer
                     ? "bg-green-500 text-white"
                     : isAnswered && option === selectedOption
                     ? "bg-red-500 text-white"
@@ -130,12 +135,16 @@ const Quiz = ({ params }) => {
               onClick={handleNext}
               className="mt-8 w-full py-4 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition"
             >
-              {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next Question"}
+              {currentQuestionIndex === questions.length - 1
+                ? "Submit"
+                : "Next Question"}
             </button>
           )}
         </div>
       ) : (
         <Results
+          userId={userId}
+          subject={subject}
           score={points}
           totalQuestions={questions.length}
           correctAnswers={correctAnswers}

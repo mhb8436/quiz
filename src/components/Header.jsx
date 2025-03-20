@@ -3,7 +3,7 @@
 import { FaCoins } from "react-icons/fa6";
 
 import Link from "next/link";
-import { usePoints } from "@/context/PointsContext";
+import { usePoints } from "../context/PointsContext";
 
 const Header = () => {
   const { points } = usePoints();

@@ -1,0 +1,1 @@
+rsync -e "ssh -i ~/.ssh/jihoonleekey.pem" -avz --delete --exclude="node_modules" .next package.json package-lock.json public .env ubuntu@3.35.152.150:/home/ubuntu/quiz/

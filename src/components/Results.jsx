@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FaTrophy, FaCheckCircle, FaTimesCircle, FaQuestionCircle, FaPercentage, FaClock, FaStopwatch } from "react-icons/fa";
-import Confetti from 'react-confetti';
-import { useWindowSize } from 'react-use';
+import { use, useEffect, useState } from "react";
+import {
+  FaTrophy,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaQuestionCircle,
+  FaPercentage,
+  FaClock,
+  FaStopwatch,
+} from "react-icons/fa";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 
 const Results = ({
+  userId,
+  subject,
   score,
   totalQuestions,
   correctAnswers,
@@ -23,19 +33,52 @@ const Results = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowConfetti(false);
-    }, 7000); 
+    }, 7000);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    // save score database
+    fetch("/api/scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subject,
+        userId,
+        score,
+        totalQuestions,
+        correctAnswers,
+        wrongAnswers,
+        unattemptedQuestions,
+        percentage,
+        timeSpent,
+        averageTimePerQuestion,
+      }),
+    });
+  }, [
+    subject,
+    score,
+    totalQuestions,
+    correctAnswers,
+    wrongAnswers,
+    unattemptedQuestions,
+    percentage,
+    timeSpent,
+    averageTimePerQuestion,
+  ]);
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      {showConfetti && <Confetti width={width} height={height} numberOfPieces={700} />}
+      {showConfetti && (
+        <Confetti width={width} height={height} numberOfPieces={700} />
+      )}
 
       <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
         Quiz Results
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
-        
         {/* Total Points */}
         <div className="p-5 bg-white shadow-md rounded-lg flex items-center justify-between hover:shadow-lg transition-shadow duration-300">
           <div>
@@ -49,7 +92,9 @@ const Results = ({
         <div className="p-5 bg-white shadow-md rounded-lg flex items-center justify-between hover:shadow-lg transition-shadow duration-300">
           <div>
             <p className="text-xl font-semibold">Points Earned</p>
-            <p className="text-lg font-bold text-green-600">{correctAnswers * 4}</p>
+            <p className="text-lg font-bold text-green-600">
+              {correctAnswers * 4}
+            </p>
           </div>
           <FaTrophy className="text-yellow-500 text-3xl" />
         </div>
@@ -76,7 +121,9 @@ const Results = ({
         <div className="p-5 bg-white shadow-md rounded-lg flex items-center justify-between hover:shadow-lg transition-shadow duration-300">
           <div>
             <p className="text-xl font-semibold">Unattempted Questions</p>
-            <p className="text-lg font-bold text-yellow-600">{unattemptedQuestions}</p>
+            <p className="text-lg font-bold text-yellow-600">
+              {unattemptedQuestions}
+            </p>
           </div>
           <FaQuestionCircle className="text-yellow-500 text-3xl" />
         </div>
@@ -94,7 +141,9 @@ const Results = ({
         <div className="p-5 bg-white shadow-md rounded-lg flex items-center justify-between hover:shadow-lg transition-shadow duration-300">
           <div>
             <p className="text-xl font-semibold">Total Time Spent</p>
-            <p className="text-lg font-bold text-purple-600">{timeSpent.toFixed(2)}s</p>
+            <p className="text-lg font-bold text-purple-600">
+              {timeSpent.toFixed(2)}s
+            </p>
           </div>
           <FaClock className="text-purple-500 text-3xl" />
         </div>
@@ -103,7 +152,9 @@ const Results = ({
         <div className="p-5 bg-white shadow-md rounded-lg flex items-center justify-between hover:shadow-lg transition-shadow duration-300">
           <div>
             <p className="text-xl font-semibold">Avg Time/Question</p>
-            <p className="text-lg font-bold text-indigo-600">{averageTimePerQuestion}s</p>
+            <p className="text-lg font-bold text-indigo-600">
+              {averageTimePerQuestion}s
+            </p>
           </div>
           <FaStopwatch className="text-indigo-500 text-3xl" />
         </div>
