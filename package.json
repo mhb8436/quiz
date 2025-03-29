@@ -1,5 +1,5 @@
 {
-  "name": "quiz-app",
+  "name": "knowledge-quest",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "@vercel/speed-insights": "^1.0.12",
+    "framer-motion": "^11.0.8",
     "next": "14.2.13",
     "react": "^18",
     "react-confetti": "^6.1.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@types/node": "22.13.10",
     "@types/react": "19.0.12",
+    "autoprefixer": "^10.4.18",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "postcss": "^8",
